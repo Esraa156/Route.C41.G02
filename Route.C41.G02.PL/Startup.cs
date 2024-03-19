@@ -18,12 +18,12 @@ namespace Route.C41.G02.PL
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; } = null;  
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -34,8 +34,8 @@ namespace Route.C41.G02.PL
 
             services.AddDbContext<ApplicationDbContext>(options=>
 
-            options.UseSqlServer("Server = LAPTOP-ASFDTF01\\MSSQLSERVERR; Database = RouteMVCProject;TrustedServerCertificate = True")
-            
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultCollection"))
+
             );
 
         }
