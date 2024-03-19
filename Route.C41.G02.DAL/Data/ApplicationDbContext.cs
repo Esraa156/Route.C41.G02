@@ -9,10 +9,16 @@ using System.Threading.Tasks;
 
 namespace Route.C41.G02.DAL.Data
 {
-    internal class ApplicationDbContext:DbContext
+    public class ApplicationDbContext:DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server = LAPTOP-ASFDTF01\\MSSQLSERVERR; Database = RouteMVCProject;TrustedServerCertificate = True");
+
+        public ApplicationDbContext():base()
+        {
+
+        }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //=> optionsBuilder.UseSqlServer("Server = LAPTOP-ASFDTF01\\MSSQLSERVERR; Database = RouteMVCProject;TrustedServerCertificate = True");
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
