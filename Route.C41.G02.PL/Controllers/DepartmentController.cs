@@ -19,11 +19,28 @@ namespace Route.C41.G02.PL.Controllers
             return View(departments);
 
         }
+        [HttpGet]
         public IActionResult Create()
 
         {
 
             return View();
+        }
+        [HttpPost]
+        public IActionResult Create(Department department)
+
+        {
+            if(ModelState.IsValid)//Server Side Validation
+            {
+               var Count= _idepartmentRepository.Add(department);
+                if(Count > 0)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+            }
+            
+            return View(department);
         }
     }
 }

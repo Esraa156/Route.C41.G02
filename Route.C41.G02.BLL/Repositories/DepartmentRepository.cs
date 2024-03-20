@@ -21,7 +21,7 @@ namespace Route.C41.G02.BLL.Repositories
         }
         public int Add(Department department)
         {
-            _dbcontext.Add(department);
+            _dbcontext.Departments.Add(department);
            return _dbcontext.SaveChanges();
 
 

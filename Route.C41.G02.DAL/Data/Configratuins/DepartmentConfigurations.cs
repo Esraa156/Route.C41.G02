@@ -15,8 +15,8 @@ namespace Route.C41.G02.DAL.Data.Configratuins
         {
             //Fluent API for Department Domain
             builder.Property(D => D.Id).UseIdentityColumn(10,10);
-            builder.Property(D => D.Name).HasColumnType("varchar").IsRequired();
-            builder.Property(D => D.Code).HasColumnType("varchar").IsRequired();
+            builder.Property(D => D.Name).HasColumnType("varchar(22)").IsRequired();
+            builder.Property(D => D.Code).HasColumnType("varchar(22)").IsRequired();
 
         }
     }
