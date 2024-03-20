@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Route.C41.G02.DAL\Route.C41.G02.DAL.csproj" />
+    <ProjectReference Include="..\Route.C41.G02.BLL\Route.C41.G02.BLL.csproj" />
   </ItemGroup>
 
 </Project>
