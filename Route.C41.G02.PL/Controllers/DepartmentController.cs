@@ -42,5 +42,30 @@ namespace Route.C41.G02.PL.Controllers
             
             return View(department);
         }
+
+        // Department/Details/id
+       // Department/Details
+
+        [HttpGet]
+        public  IActionResult Details(int? id) {
+        
+        
+            if(id is null)
+            {
+                return BadRequest(); //400
+            }
+
+            var dept = _idepartmentRepository.GetById(id.Value);
+        
+            if(dept is null)
+            {
+                return NotFound(); //404
+            }
+            return View(dept);
+        
+        
+        
+        
+        }
     }
 }
