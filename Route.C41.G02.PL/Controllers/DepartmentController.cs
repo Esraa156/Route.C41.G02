@@ -76,6 +76,7 @@ namespace Route.C41.G02.PL.Controllers
             // Department/Details
 
             [HttpGet]
+            [ValidateAntiForgeryToken]
             public IActionResult Edit(int ? id)
             {
 
