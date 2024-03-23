@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Hosting;
 using Route.C41.G02.BLL.Interfaces;
 using Route.C41.G02.DAL.Models;
+using Route.C41.G02.PL.ViewModels;
 using System;
 namespace Route.C41.G02.PL.Controllers
 {
@@ -101,7 +102,7 @@ namespace Route.C41.G02.PL.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit([FromRoute]int id,Department department)
+        public IActionResult Edit([FromRoute] int id, Department department)
         {
             if (id != department.Id)
             {
@@ -126,18 +127,48 @@ namespace Route.C41.G02.PL.Controllers
                 {
                     ModelState.AddModelError(string.Empty, Ex.Message);
                 }
-                else {
+                else
+                {
 
                     ModelState.AddModelError(string.Empty, "An Error Has Ocuured During updating The Department ");
-            }
+                }
                 return View(department);
 
             }
 
+        }
+            [HttpGet]
+            public IActionResult Delete(int? id)
+            {
+                return Details(id, "Delete");   
+            }
+        [HttpPost]
+        public IActionResult Delete(Department department)
+        {
+            try
+            {
+                _idepartmentRepository.Delete(department);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception Ex)
+            {
+                //1.Log Exception
+                //Show Friendly Message
 
+                if (_env.IsDevelopment())
+                {
+                    ModelState.AddModelError(string.Empty, Ex.Message);
+                }
+                else
+                {
 
+                    ModelState.AddModelError(string.Empty, "An Error Has Ocuured During updating The Department ");
+                }
+                return View(department);
+            }
 
         }
+    }
 
-        }
-}
+    }
+
