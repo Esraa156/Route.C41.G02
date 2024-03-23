@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Route.C41.G02.BLL\Route.C41.G02.BLL.csproj" />
+    <ProjectReference Include="..\Route.C41.G02.DAL\Route.C41.G02.DAL.csproj" />
   </ItemGroup>
 
 </Project>

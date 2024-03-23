@@ -26,6 +26,7 @@ namespace Route.C41.G02.DAL.Data
 
 
         public DbSet<Department> Departments{ get; set; }
+        public DbSet<Employee>employees  { get; set; }
 
 
     }
