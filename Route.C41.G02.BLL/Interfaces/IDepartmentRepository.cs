@@ -7,19 +7,9 @@ using Route.C41.G02.DAL.Models;
 
 namespace Route.C41.G02.BLL.Interfaces
 {
-    public interface IDepartmentRepository
+    public interface IDepartmentRepository: IGenericReposatory<Department>
     {
-        IEnumerable<Department> GetAll();
-
-        Department GetById(int id);
-
-
-        int Add(Department department);
-
-        int Update(Department department);
-
-
-        int Delete(Department department);
+        
 
     }
 }
