@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Route.C41.G02.BLL.Interfaces;
 using Route.C41.G02.BLL.Repositories;
@@ -11,10 +12,10 @@ namespace Route.C41.G02.PL.Controllers
     public class EmployeeController : Controller
     {
 
-        private readonly EmployeeRepository _EmployeeRepository;
-        private readonly IHostEnvironment _environment;
+        private readonly IEmployeeRepository _EmployeeRepository;
+        private readonly IWebHostEnvironment _environment;
 
-        public EmployeeController(EmployeeRepository EmployeeRepository, IHostEnvironment environment)
+        public EmployeeController(IEmployeeRepository EmployeeRepository, IWebHostEnvironment environment)
         {
             _EmployeeRepository = EmployeeRepository;
             _environment = environment;
@@ -126,6 +127,8 @@ namespace Route.C41.G02.PL.Controllers
             try
             {
                 _EmployeeRepository.Delete(employee);
+                return RedirectToAction(nameof(Index));
+
 
             }
 
