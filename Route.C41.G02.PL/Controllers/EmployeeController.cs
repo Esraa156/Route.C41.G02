@@ -49,13 +49,24 @@ namespace Route.C41.G02.PL.Controllers
                 int c = _EmployeeRepository.Add(employee);
                 if (c > 0)
                 {
-                    return RedirectToAction(nameof(Index));
-                }
+                    TempData["Message"] = "Employee Created Successfully ";
 
+                    //TempData
+
+                }
+                else
+                {
+                    TempData["Message"] = "An Error Has Occured During Creation Employee ";
+
+                }
+                return RedirectToAction(nameof(Index));
             }
+
+
             return View(employee);
 
         }
+    
         [HttpGet]
         public IActionResult Edit(int? id)
         {
