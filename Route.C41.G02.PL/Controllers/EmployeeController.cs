@@ -25,6 +25,8 @@ namespace Route.C41.G02.PL.Controllers
         {
             var Employees = _EmployeeRepository.GetAll();
             return View(Employees);
+
+
         }
         [HttpGet]
         public IActionResult Create() {
