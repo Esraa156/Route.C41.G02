@@ -16,5 +16,7 @@ namespace Route.C41.G02.DAL.Models
         public string Code { get; set; }
         public DateTime DateOfCreation { get; set; }
 
+        //[Nav-Property MANY]
+        public ICollection<Employee> Employees { get;}=new HashSet<Employee>(); 
     }
 }

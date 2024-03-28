@@ -62,5 +62,12 @@ namespace Route.C41.G02.DAL.Models
 
         public EmpType Emptype { get; set; }
 
+
+        //[ForeignKey]
+        public int? DepartmentId { get; set; }
+
+        //[navigation ONE]
+        public virtual Department Department { get; set; }
+
     }
 }

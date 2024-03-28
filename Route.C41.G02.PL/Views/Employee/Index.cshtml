@@ -42,6 +42,7 @@
                 <th>@Html.DisplayNameFor(D => D.Email)</th>
                 <th >@Html.DisplayNameFor(D => D.gender)</th>
                 <th>@Html.DisplayNameFor(D => D.IsActive)</th>
+                <th>@Html.DisplayNameFor(D => D.Department)</th>
 
                 @* <th>@Html.DisplayNameFor(D => D.HiringDate)</th>
             <th>@Html.DisplayNameFor(D => D.Emptype)</th> *@
@@ -64,6 +65,7 @@
                     <td>@employee.Email</td>
                     <td>@employee.gender</td>
                     <td>@employee.IsActive</td>
+                    <td>@employee.Department?.Name</td>
 
 
                     <partial name="_ButtonPartialView" model="@employee.Id"/>

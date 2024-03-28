@@ -1,4 +1,11 @@
 ﻿@model Employee
+@inject IDepartmentRepository _DepartmentRepo
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var departments=ViewBag.departments = new SelectList(_DepartmentRepo.GetAll(),nameof(Department.Id),nameof(Department.Name));
+    }
 <div class="form-group">
     <label class="col-form-label" asp-for="Name"></label>
     <input asp-for="Name" class="form-control" />
@@ -34,4 +41,16 @@
     <label class="col-form-label" asp-for="Email"></label>
     <input asp-for="Email" class="form-control" />
     <span asp-validation-for="Email" class="text-danger"></span>
+</div>
+<div class="form-group">
+
+    <label class="col-form-label" asp-for="Department"></label>
+    <select class="form-control" asp-for="@Model.DepartmentId" asp-items="@departments">
+
+<option value="@null"></option>
+</select>
+
+
+
+
 </div>
