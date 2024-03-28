@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Employee>
+﻿@model IEnumerable<EmployeeViewModel>
 @{
     ViewData["Title"] = "Index";
     ViewBag.Title = "Index";
@@ -49,7 +49,7 @@
     <table class="mt-4 table table-striped table-hover">
         <thead>
             <tr>
-                <th>@Html.DisplayNameFor(D=>D.Name)</th>
+                <th>@Html.DisplayNameFor(D=>D.EmpName)</th>
                 <th>@Html.DisplayNameFor(D => D.Age)</th>
                 <th>@Html.DisplayNameFor(D => D.Address)</th>
 
@@ -68,12 +68,12 @@
                 <th>Update</th>
                 <th>Delete</th>
 
-                @foreach(Employee employee in Model)
+                @foreach(EmployeeViewModel employee in Model)
                 {
                     
                     <tr>
 
-                    <td>@employee.Name</td>
+                    <td>@employee.EmpName</td>
                     <td>@employee.Age</td>
                     <td>@employee.Address</td>
                     <td>@employee.Salary</td>

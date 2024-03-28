@@ -24,6 +24,8 @@ namespace Route.C41.G02.DAL.Data.Configratuins
                 (genderAsString) => (Gender)Enum.Parse(typeof(Gender), genderAsString, true)//Retrieve from DataBase
                 );
 
+            
+
         }
     }
 }

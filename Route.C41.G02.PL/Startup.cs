@@ -9,6 +9,7 @@ using Route.C41.G02.BLL.Interfaces;
 using Route.C41.G02.BLL.Repositories;
 using Route.C41.G02.DAL.Data;
 using Route.C41.G02.PL.Extensions;
+using Route.C41.G02.PL.Helpres;
 using System;
 using System.Collections.Generic;
 
@@ -43,6 +44,7 @@ namespace Route.C41.G02.PL
            
 
             services.AddApplicationService();  //Extension Method
+            services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
 
         }
 
