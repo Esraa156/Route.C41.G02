@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Castle.Core.Internal;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Route.C41.G02.BLL.Interfaces;
@@ -21,9 +22,22 @@ namespace Route.C41.G02.PL.Controllers
             _environment = environment;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchInp)
         {
-            var Employees = _EmployeeRepository.GetAll();
+
+            if (searchInp.IsNullOrEmpty())
+            {
+                var Employees = _EmployeeRepository.GetAll();
+                return View(Employees);
+
+            }
+            else
+            {
+                
+                var employee= _EmployeeRepository.SearchByName(searchInp.ToLower());
+                return View(employee);
+            
+            }
 
             //1.ViewData
 
@@ -31,7 +45,6 @@ namespace Route.C41.G02.PL.Controllers
 
             //2.ViewBag
             ViewBag.Message = "Hello ViewBag";
-            return View(Employees);
 
         }
         [HttpGet]

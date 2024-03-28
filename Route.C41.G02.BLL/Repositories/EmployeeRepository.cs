@@ -18,5 +18,11 @@ namespace Route.C41.G02.BLL.Repositories
         {
             return _dbcontext.employees.Where(E=>E.Address.ToLower()==adress.ToLower());
         }
+
+        public IQueryable<Employee> SearchByName(string name)
+        
+           => _dbcontext.employees.Where(E=>E.Name.ToLower().Contains(name));
+
+                
     }
 }
