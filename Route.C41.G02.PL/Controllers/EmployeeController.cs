@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Route.C41.G02.BLL.Interfaces;
+using Route.C41.G02.BLL.Repositories;
 using Route.C41.G02.DAL.Models;
 using Route.C41.G02.PL.ViewModels;
 using System;
@@ -26,17 +27,23 @@ namespace Route.C41.G02.PL.Controllers
         public IActionResult Index(string searchInp)
         {
             IEnumerable<EmployeeViewModel> mappedEmployees;
+            var employees = Enumerable.Empty<Employee>();
+
+
+            //if (string.IsNullOrEmpty(searchInp))
+            //{
+            //    var employees = _unitOfWork.EmployeeRepository.GetAll();
+            //    mappedEmployees = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
+            //}
+            var employeeRepo = _unitOfWork.Repository<Employee>() as EmployeeRepository;
 
             if (string.IsNullOrEmpty(searchInp))
-            {
-                var employees = _unitOfWork.EmployeeRepository.GetAll();
-                mappedEmployees = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
-            }
+                employees = employeeRepo.GetAll();
             else
             {
-                var employees = _unitOfWork.EmployeeRepository.SearchByName(searchInp);
-                mappedEmployees = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
+                employees = employeeRepo.SearchByName(searchInp);
             }
+            mappedEmployees = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
 
             return View(mappedEmployees);
         }
@@ -52,9 +59,8 @@ namespace Route.C41.G02.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var mappedEmployee = _mapper.Map<EmployeeViewModel, Employee>(employee);
-                _unitOfWork.EmployeeRepository.Add(mappedEmployee);
-                _unitOfWork.Complete();
+                _unitOfWork.Repository<Employee>().Add(mappedEmp);
+                var count = _unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -70,7 +76,7 @@ namespace Route.C41.G02.PL.Controllers
             if (id == null)
                 return BadRequest();
 
-            var employee = _unitOfWork.EmployeeRepository.Get(id.Value);
+            var employee = _unitOfWork.Repository<Employee>().Get(id.Value);
             var mappedEmp = _mapper.Map<Employee, EmployeeViewModel>(employee);
 
             return View(mappedEmp);
@@ -101,7 +107,7 @@ namespace Route.C41.G02.PL.Controllers
             try
             {
                 var mappedEmp = _mapper.Map<EmployeeViewModel, Employee>(employee);
-                _unitOfWork.EmployeeRepository.Update(mappedEmp);
+                _unitOfWork.Repository<Employee>().Update(mappedEmp);
                 _unitOfWork.Complete();
                 return RedirectToAction(nameof(Index));
             }
@@ -123,9 +129,11 @@ namespace Route.C41.G02.PL.Controllers
                 return BadRequest();
 
             var employee = _unitOfWork.EmployeeRepository.Get(id.Value);
-            var mappedEmp = _mapper.Map<Employee, EmployeeViewModel>(employee);
+             _unitOfWork.Repository<Employee>().Delete(mappedEmp);
+            ;
 
-            return View(mappedEmp);
+            _unitOfWork.Complete();
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
