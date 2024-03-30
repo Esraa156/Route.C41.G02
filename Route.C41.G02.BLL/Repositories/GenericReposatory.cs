@@ -19,10 +19,10 @@ namespace Route.C41.G02.BLL.Repositories
         {
             _dbcontext = applicationDbContext;
         }
-        public int Add(T entity)
+        public void Add(T entity)
         {
             _dbcontext.Set<T>().Add(entity);
-            return _dbcontext.SaveChanges();
+           // return _dbcontext.SaveChanges();
 
 
 
@@ -30,10 +30,10 @@ namespace Route.C41.G02.BLL.Repositories
 
 
 
-        public int Delete(T entity)
+        public void Delete(T entity)
         {
             _dbcontext.Set<T>().Remove(entity);
-            return _dbcontext.SaveChanges();
+           // return _dbcontext.SaveChanges();
         }
 
         public IEnumerable<T> GetAll()
@@ -57,10 +57,10 @@ namespace Route.C41.G02.BLL.Repositories
 
         }
 
-        public int Update(T entity)
+        public void Update(T entity)
         {
             _dbcontext.Update(entity);
-            return _dbcontext.SaveChanges();
+         //   return _dbcontext.SaveChanges();
         }
 
     
