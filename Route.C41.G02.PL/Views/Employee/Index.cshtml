@@ -49,6 +49,7 @@
     <table class="mt-4 table table-striped table-hover">
         <thead>
             <tr>
+                <th>Image</th>
                 <th>@Html.DisplayNameFor(D=>D.EmpName)</th>
                 <th>@Html.DisplayNameFor(D => D.Age)</th>
                 <th>@Html.DisplayNameFor(D => D.Address)</th>
@@ -72,7 +73,7 @@
                 {
                     
                     <tr>
-
+                    <td>@employee.Image</td>
                     <td>@employee.EmpName</td>
                     <td>@employee.Age</td>
                     <td>@employee.Address</td>

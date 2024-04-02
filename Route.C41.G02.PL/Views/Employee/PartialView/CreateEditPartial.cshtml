@@ -4,6 +4,8 @@
 @{
     var departments = new SelectList(_unitOfWork.Repository<DepartmentViewModel>().GetAll(), nameof(DepartmentViewModel.Id), nameof(DepartmentViewModel.Name));
 }
+
+
 <div class
     <label class="col-fo="form-group">rm-label" asp-for="EmpName"></label>
     <input asp-for="EmpName" class="form-control" />
