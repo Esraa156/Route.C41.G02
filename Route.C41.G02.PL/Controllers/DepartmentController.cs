@@ -1,184 +1,153 @@
-﻿//using Abp.Domain.Uow;
-//using AutoMapper;
-//using Microsoft.AspNetCore.Hosting;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.AspNetCore.Mvc.ModelBinding;
-//using Microsoft.Extensions.Hosting;
-//using Route.C41.G02.BLL.Interfaces;
-//using Route.C41.G02.BLL.Repositories;
-//using Route.C41.G02.DAL.Models;
-//using Route.C41.G02.PL.ViewModels;
-//using System;
-//using System.Collections.Generic;
-//namespace Route.C41.G02.PL.Controllers
-//{
-//    //Inhertence
-//    public class DepartmentController : Controller
-//    {
-//        //Association :-Composition
-//        private readonly IUnitOfWork _unitOfWork;
-//        private readonly IWebHostEnvironment _env;
-//        private readonly IMapper mapper;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Hosting;
+using Route.C41.G02.BLL.Interfaces;
+using Route.C41.G02.BLL.Repositories;
+using Route.C41.G02.DAL.Models;
+using Route.C41.G02.PL.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+namespace Route.C41.G02.PL.Controllers
+{
+    //Inhertence
+   
+        //Inheritance : DepartmentController is a Controller
+        //Composition : DepartmentController has a Department Repository
 
+        public class DepartmentController : Controller
+        {
+            private readonly IUnitOfWork _unitOfWork;
+            private readonly IWebHostEnvironment _env;
+            private readonly IMapper mapper;
 
-//        public DepartmentController(IUnitOfWork unitOfWork , IWebHostEnvironment env, IMapper mapperr) //Ask CLR for creating object from any class implementing interface IDepartmentRepository
-//        {
-//            _unitOfWork = unitOfWork;
-//            _env = env;
-//            this.mapper = mapper;
-//        }
-//        public IActionResult Index()
-//        {
-//            var departments = _unitOfWork.DepartmentRepository.GetAll();
-//            var mappedDepartments = mapper.Map<IEnumerable<Department>, IEnumerable<DepartmentViewModel>>(departments);
+            public DepartmentController(IUnitOfWork unitOfWork, IWebHostEnvironment env, IMapper mapper)
+            {
+                _unitOfWork = unitOfWork;
+                _env = env;
+                this.mapper = mapper;
+            }
+            public async Task<IActionResult> Index()
+            {
+                var departments = await _unitOfWork.Repository<Department>().GetAllAsync();
+                var mappedDepartments =  mapper.Map<IEnumerable<Department>, IEnumerable<DepartmentViewModel>>(departments);
+                return View(mappedDepartments);
+            }
 
-//            return View(departments);
+            public IActionResult Create()
+            {
+                return View();
+            }
 
-//        }
-//        [HttpGet]
-//        public IActionResult Create()
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Create(DepartmentViewModel departmentVM)
+            {
+                var mappedDep = mapper.Map<DepartmentViewModel, Department>(departmentVM);
+                if (ModelState.IsValid) // server side validation
+                {
+                     _unitOfWork.Repository<Department>().Add(mappedDep);
+                    var count = await _unitOfWork.Complete();
+                    if (count > 0)
+                        return RedirectToAction(nameof(Index));
+                }
+                return View(mappedDep);
+            }
 
-//        {
+            // /Department/Details/10 
+            // /Department/Details 
 
-//            return View();
-//        }
-//        [HttpPost]
-//        public IActionResult Create(Department department)
+            [HttpGet]
+            public async Task<IActionResult> Details(int? id, string viewName = "Details")
+            {
+                if (!id.HasValue)//id is null
+                    return BadRequest();
 
-//        {
-//            var mappedDep = mapper.Map<DepartmentViewModel, Department>(departmentVM);
-//            if (ModelState.IsValid) // server side validation
-//            {
-//                var count = _departmentRepository.Add(mappedDep);
-//                _unitOfWork.DepartmentRepository.Add(mappedDep);
-//                var count = _unitOfWork.Complete();
-//                if (count > 0)
-//                    return RedirectToAction(nameof(Index));
-//            }
+                var department = await _unitOfWork.Repository<Department>().GetAsync(id.Value);
+                _unitOfWork.Complete();
+                if (department is null)
+                    return NotFound();
+                var mappedDep = mapper.Map<Department, DepartmentViewModel>(department);
+                return View(viewName, mappedDep);
+            }
 
-//            return View(department);
-//        }
+            [HttpGet]
+            public async Task<IActionResult> Edit(int? id)
+            {
+                return await Details(id, "Edit");
+            }
 
-//        // Department/Details/id
-//        // Department/Details
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Edit([FromRoute] int id, DepartmentViewModel departmentVM)
+            {
+                if (id != departmentVM.Id)
+                {
+                    return BadRequest(new ViewResult());
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(departmentVM);
+                }
+                try
+                {
+                    var mappedDep = mapper.Map<DepartmentViewModel, Department>(departmentVM);
+                    _unitOfWork.Repository<Department>().Update(mappedDep);
+                    await _unitOfWork.Complete();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (System.Exception ex)
+                {
+                    //log exception
+                    if (_env.IsDevelopment())
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    else
+                        ModelState.AddModelError(string.Empty, ("An error has occured during updating the department"));
+                    return View(departmentVM);
+                }
+            }
+            public async Task<IActionResult> Delete(int? id)
+            {
+                return await Details(id, "Delete");
+            }
 
-//        [HttpGet]
-//        public IActionResult Details(int? id,string ViewName="Details")
-//        {
+            [HttpPost]
+            public IActionResult Delete(DepartmentViewModel departmentVM)
+            {
+                try
+                {
+                    var mappedDep = mapper.Map<DepartmentViewModel, Department>(departmentVM);
+                    _unitOfWork.Repository<Department>().Delete(mappedDep);
+                    _unitOfWork.Complete();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    if (_env.IsDevelopment())
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                    else
+                        ModelState.AddModelError(string.Empty, ("An error has occured during updating the department"));
+                    return View(departmentVM);
+                    //return View("Error", new ErrorViewModel());
+                }
+            }
 
+            ///Delete using modal
+            ///[HttpPost]
+            ///[ValidateAntiForgeryToken]
+            ///public IActionResult Delete(int id)
+            ///{
+            ///	var departmentToDelete = _departmentRepo.Get(id);
+            ///	if (departmentToDelete == null)
+            ///	{
+            ///		return NotFound(); 
+            ///	}
+            ///	_departmentRepo.Delete(departmentToDelete); 
+            ///	return RedirectToAction("Index");
+            ///}
 
-//            if (id is null)
-//            {
-//                return BadRequest(); //400
-//            }
-
-//            var dept = _idepartmentRepository.GetById(id.Value);
-
-//            if (dept is null)
-//            {
-//                return NotFound(); //404
-//            }
-//            return View(ViewName, dept);
-//        }
-
-
-
-//            // Department/Details/id
-//            // Department/Details
-
-//            [HttpGet]
-//            [ValidateAntiForgeryToken]
-//            public IActionResult Edit(int ? id)
-//            {
-
-
-//            //if (!id.HasValue)
-//            //{
-//            //    return BadRequest(); //400
-//            //}
-
-//            //var dept = _idepartmentRepository.GetById(id.Value);
-
-//            //if (dept is null)
-//            //{
-//            //    return NotFound(); //404
-//            //}
-//            //return View(dept);
-
-
-//            return Details( id, "Edit");
-            
-//            }
-
-
-//        [HttpPost]
-//        public IActionResult Edit([FromRoute] int id, Department department)
-//        {
-//            if (id != department.Id)
-//            {
-//                return BadRequest("An Error Ya Esraa !");
-//            }
-//            if (!ModelState.IsValid)
-//            {
-//                return View(department);
-//            }
-
-//            try
-//            {
-
-//                _idepartmentRepository.Update(department);
-//                return RedirectToAction(nameof(Index));
-//            }
-//            catch (Exception Ex)
-//            {
-//                //1. Log Exception
-//                //2. Friendly message
-//                if (_env.IsDevelopment())
-//                {
-//                    ModelState.AddModelError(string.Empty, Ex.Message);
-//                }
-//                else
-//                {
-
-//                    ModelState.AddModelError(string.Empty, "An Error Has Ocuured During updating The Department ");
-//                }
-//                return View(department);
-
-//            }
-
-//        }
-//            [HttpGet]
-//            public IActionResult Delete(int? id)
-//            {
-//                return Details(id, "Delete");   
-//            }
-//        [HttpPost]
-//        public IActionResult Delete(Department department)
-//        {
-//            try
-//            {
-//                _idepartmentRepository.Delete(department);
-//                return RedirectToAction(nameof(Index));
-//            }
-//            catch (Exception Ex)
-//            {
-//                //1.Log Exception
-//                //Show Friendly Message
-
-//                if (_env.IsDevelopment())
-//                {
-//                    ModelState.AddModelError(string.Empty, Ex.Message);
-//                }
-//                else
-//                {
-
-//                    ModelState.AddModelError(string.Empty, "An Error Has Ocuured During updating The Department ");
-//                }
-//                return View(department);
-//            }
-
-//        }
-//    }
-
-//    }
+        }
+    }
 
