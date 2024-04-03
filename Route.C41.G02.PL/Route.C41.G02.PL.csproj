@@ -6,8 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Helpres\**" />
+    <Content Remove="Helpres\**" />
+    <EmbeddedResource Remove="Helpres\**" />
+    <None Remove="Helpres\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Department\PartialViews\CreateEditDepartmentPartial.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Abp" Version="9.1.3" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.17" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.17">
       <PrivateAssets>all</PrivateAssets>
@@ -19,6 +32,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Route.C41.G02.BLL\Route.C41.G02.BLL.csproj" />
     <ProjectReference Include="..\Route.C41.G02.DAL\Route.C41.G02.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Files\Images\" />
   </ItemGroup>
 
 </Project>

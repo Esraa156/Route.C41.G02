@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,7 +10,6 @@ using Route.C41.G02.BLL.Interfaces;
 using Route.C41.G02.BLL.Repositories;
 using Route.C41.G02.DAL.Data;
 using Route.C41.G02.PL.Extensions;
-using Route.C41.G02.PL.Helpres;
 using System;
 using System.Collections.Generic;
 
@@ -22,32 +22,34 @@ namespace Route.C41.G02.PL
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; } = null;  
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
+        public IConfiguration Configuration { get; } = null;
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            //services.AddControllersWithViews();
+            services.AddMvc();
+            // services.AddTransient<ApplicationDbContext>();
             // services.AddScoped<ApplicationDbContext>();
+            // services.AddSingleton<ApplicationDbContext>();
             //services.AddScoped<DbContextOptions<ApplicationDbContext>>();
 
-            services.AddDbContext<ApplicationDbContext>(options=>
-
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultCollection"))
-            
-            ,ServiceLifetime.Scoped);
-           
-
-            services.AddApplicationService();  //Extension Method
-            services.AddAutoMapper(M=>M.AddProfile(new MappingProfiles()));
+            services.AddDbContext<ApplicationDbContext>
+                (
+                options =>
+                {
+                    options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultCollection"));
+                }
+                );
+            services.AddApplicationServices();
+            //services.AddAutoMapper(M => M.AddProfile(new MappingProfiles()));
+            //services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddApplicationServices();
 
         }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
