@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+using Microsoft.EntityFrameworkCore;
 using Route.C41.G02.BLL.Interfaces;
 using Route.C41.G02.DAL.Data;
 using Route.C41.G02.DAL.Models;
@@ -10,59 +11,41 @@ using System.Threading.Tasks;
 
 namespace Route.C41.G02.BLL.Repositories
 {
-    public class GenericReposatory<T> : IGenericReposatory<T> where T : ModelBase
+    public class GenericRepository<T> : IGenericReposatory<T> where T : ModelBase
     {
-        private protected readonly ApplicationDbContext _dbcontext;
-
-
-        public GenericReposatory(ApplicationDbContext applicationDbContext)
+        private protected readonly ApplicationDbContext _dbContext;
+        public GenericRepository(ApplicationDbContext dbContext)
         {
-            _dbcontext = applicationDbContext;
+            _dbContext = dbContext;
         }
         public void Add(T entity)
-        {
-            _dbcontext.Set<T>().Add(entity);
-           // return _dbcontext.SaveChanges();
-
-
-
-        }
-
-
+        
+          =>  _dbContext.Set<T>().Add(entity);
+        
 
         public void Delete(T entity)
         {
-            _dbcontext.Set<T>().Remove(entity);
-           // return _dbcontext.SaveChanges();
+            _dbContext.Set<T>().Remove(entity);
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task <T> GetAsync(int id)
         {
+            return await _dbContext.FindAsync<T>(id);
+        }
 
-            if(typeof(T)==typeof(Employee))
-            return (IEnumerable<T>)_dbcontext.employees.Include(E=>E.Department).AsNoTracking().ToList();
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
+        {
+            if (typeof(T) == typeof(Employee))
+                return (IEnumerable<T>)await _dbContext.Set<Employee>().Include(E => E.Department).AsNoTracking().ToListAsync();
 
             else
-                return _dbcontext.Set<T>().AsNoTracking().ToList(); 
-        }
-
-        public T GetById(int id)
-        {
-            //var department= _dbcontext.Departments.Where(D=>D.Id==id).FirstOrDefault();
-            //return department;
-
-            var entity = _dbcontext.Set<T>().Find(id);
-            return entity;
+                return await _dbContext.Set<T>().AsNoTracking().ToListAsync();
 
 
         }
-
         public void Update(T entity)
         {
-            _dbcontext.Update(entity);
-         //   return _dbcontext.SaveChanges();
+            _dbContext.Update(entity);
         }
-
-    
     }
-    }
+}

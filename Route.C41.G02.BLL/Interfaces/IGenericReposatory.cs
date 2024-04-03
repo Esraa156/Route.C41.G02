@@ -9,17 +9,10 @@ namespace Route.C41.G02.BLL.Interfaces
 {
     public interface IGenericReposatory<T> where T : ModelBase
     {
-        IEnumerable<T> GetAll();
-
-        T GetById(int id);
-
-
-        void Add(T entity);
-
+       Task< IEnumerable<T>> GetAllAsync();
+        Task<T> GetAsync(int id);
+        void  Add(T entity);
         void Update(T entity);
-
-
         void Delete(T entity);
-
     }
 }

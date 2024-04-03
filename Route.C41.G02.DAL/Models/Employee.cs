@@ -57,6 +57,7 @@ namespace Route.C41.G02.DAL.Models
         //[ForeignKey]
         public int? DepartmentId { get; set; }
 
+        public string ImageName { get; set; }
         //[navigation ONE]
         public virtual Department Department { get; set; }
 

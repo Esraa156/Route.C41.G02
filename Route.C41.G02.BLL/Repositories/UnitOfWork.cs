@@ -11,35 +11,27 @@ using System.Collections;
 using Route.C41.G02.DAL.Models;
 namespace Route.C41.G02.BLL.Repositories
 {
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    public class UnitOfWork : IUnitOfWork, IAsyncDisposable
     {
         private readonly ApplicationDbContext _dbContext;
+
+        //private Dictionary<string, IGenericRepository<ModelBase>> _repositories;
+
         private Hashtable _repositories;
 
-        public UnitOfWork(ApplicationDbContext dbContext )
-
+        public UnitOfWork(ApplicationDbContext dbContext) // Ask CLR to create object from dbcontext class
         {
             _dbContext = dbContext;
-            // EmployeeRepository = new EmployeeRepository(_dbContext);
-            // DepartmentRepository = new DepartmentRepository(_dbContext);
             _repositories = new Hashtable();
-
-
         }
 
-        public IEmployeeRepository EmployeeRepository { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IDepartmentRepository DepartmentRepository { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        //public IEmployeeRepository EmployeeRepository { get; set; }
-        //public IDepartmentRepository DepartmentRepository { get; set; }
-        public int Complete()
+        public async Task< int> Complete()
         {
-            return _dbContext.SaveChanges();
+            return await _dbContext.SaveChangesAsync();
         }
-
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
-            throw new NotImplementedException();
+           await _dbContext.DisposeAsync(); //closes the database conection
         }
 
         public IGenericReposatory<T> Repository<T>() where T : ModelBase
@@ -55,20 +47,13 @@ namespace Route.C41.G02.BLL.Repositories
                 }
                 else
                 {
-                    var repository = new GenericReposatory<T>(_dbContext);
+                    var repository = new GenericRepository<T>(_dbContext);
                     _repositories.Add(key, repository);
                 }
 
             }
 
-            return _repositories[key] as GenericReposatory<T>;
-        }
-
-        IGenericReposatory<T> IUnitOfWork.Repository<T>()
-        {
-            throw new NotImplementedException();
+            return _repositories[key] as IGenericReposatory<T>;
         }
     }
 }
-
-		

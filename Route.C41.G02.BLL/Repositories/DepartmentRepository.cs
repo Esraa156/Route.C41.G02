@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 
 namespace Route.C41.G02.BLL.Repositories
 {
-    public class DepartmentRepository : GenericReposatory<Department>, IDepartmentRepository
+    public class DepartmentRepository : GenericRepository<Department>, IDepartmentRepository
     {
-        public DepartmentRepository(ApplicationDbContext DbContext)
-        : base(DbContext) { }
+        public DepartmentRepository(ApplicationDbContext dbContext) : base(dbContext)
+        {
 
-
+        }
     }
 }
+
