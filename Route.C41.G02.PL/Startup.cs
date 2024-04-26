@@ -108,10 +108,7 @@ namespace Route.C41.G02.PL
             app.UseStaticFiles();
 
             app.UseRouting();
-			app.UseAuthentication();
-
-
-			app.UseAuthorization();
+			
 
 
             app.UseEndpoints(endpoints =>
@@ -120,6 +117,10 @@ namespace Route.C41.G02.PL
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-        }
+			app.UseAuthentication();
+
+
+			app.UseAuthorization();
+		}
     }
 }
