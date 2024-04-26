@@ -1,12 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Route.C41.G02.DAL.Models;
+using Route.C41.G02.PL.ViewModels;
 
 namespace Route.C41.G02.PL.Helpers
 {
-    public class MappingProfiles : Controller
+    public class MappingProfiles : Profile
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
-    }
+		public MappingProfiles()
+		{
+			CreateMap<EmployeeViewModel, Employee>().ReverseMap();
+			/*.ForMember(d => d.Name , o => o.MapFrom(s => s.EmpName))*/
+			CreateMap<DepartmentViewModel, Department>().ReverseMap();
+
+		}
+	}
 }
