@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Hosting;
 using Route.C41.G02.BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+
 using Route.C41.G02.BLL.Repositories;
 using Route.C41.G02.DAL.Models;
 using Route.C41.G02.PL.ViewModels;
@@ -12,12 +14,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 namespace Route.C41.G02.PL.Controllers
 {
-    //Inhertence
-   
-        //Inheritance : DepartmentController is a Controller
-        //Composition : DepartmentController has a Department Repository
+	//Inhertence
 
-        public class DepartmentController : Controller
+	//Inheritance : DepartmentController is a Controller
+	//Composition : DepartmentController has a Department Repository
+	[Authorize]
+
+	public class DepartmentController : Controller
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly IWebHostEnvironment _env;

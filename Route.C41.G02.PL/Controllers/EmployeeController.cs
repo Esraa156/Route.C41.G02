@@ -5,6 +5,7 @@ using Route.C41.G02.BLL.Interfaces;
 using Route.C41.G02.BLL.Repositories;
 using Route.C41.G02.DAL.Models;
 using Route.C41.G02.PL.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,8 @@ using System.Threading.Tasks;
 
 namespace Route.C41.G02.PL.Controllers
 {
-    public class EmployeeController : Controller
+	[Authorize]
+	public class EmployeeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHostEnvironment _env;

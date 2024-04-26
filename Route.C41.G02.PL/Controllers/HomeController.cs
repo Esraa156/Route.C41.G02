@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using Route.C41.G02.PL.ViewModels;
 using System;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace Route.C41.G02.PL.Controllers
 {
-    public class HomeController : Controller
+	[Authorize]
+
+	public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -22,8 +26,9 @@ namespace Route.C41.G02.PL.Controllers
         {
             return View();
         }
+		[AllowAnonymous]
 
-        public IActionResult Privacy()
+		public IActionResult Privacy()
         {
             return View();
         }

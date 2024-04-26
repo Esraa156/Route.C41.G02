@@ -47,13 +47,31 @@ namespace Route.C41.G02.PL
                 }
                 );
             services.AddApplicationServices();
-            services.AddAutoMapper(M => M.AddProfile(new MappingProfiles()));
-            //services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            //services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            //services.AddIdentity<ApplicationUser,IdentityRole>(options =>
-            
-            //)
-            services.AddApplicationServices();
+			services.AddAutoMapper(M => M.AddProfile(new MappingProfiles()));
+			//services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+			//services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+			//services.AddIdentity<ApplicationUser,IdentityRole>(options =>
+			services.ConfigureApplicationCookie(options =>
+			{
+				options.LoginPath = "/Account/SignIn";
+				options.ExpireTimeSpan = TimeSpan.FromDays(1);
+				options.AccessDeniedPath = "/Home/Error";
+			});
+
+			//services.AddAuthentication("Hamda");
+			services.AddAuthentication(options =>
+			{
+				//options.DefaultAuthenticateScheme = "Identity.Application";
+			}).AddCookie("Hamda", options =>
+			{
+				options.LoginPath = "/Account/SignIn";
+				options.ExpireTimeSpan = TimeSpan.FromDays(1);
+				options.AccessDeniedPath = "/Home/Error";
+			});
+
+
+			//)
+			services.AddApplicationServices();
             services.AddAuthentication();
 			services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 			{
@@ -90,8 +108,11 @@ namespace Route.C41.G02.PL
             app.UseStaticFiles();
 
             app.UseRouting();
+			app.UseAuthentication();
 
-            app.UseAuthorization();
+
+			app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {
